@@ -1,4 +1,4 @@
-;Vincent Steil & Taariq Chasmawala
+;Vincent Steil
 
 ; PointerTrafficLight.s
 ; Runs on LM3S1968
