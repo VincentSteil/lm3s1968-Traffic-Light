@@ -1,27 +1,12 @@
 ;Vincent Steil
+;VJS432
+;The University of Texas at Austin
 
 ; PointerTrafficLight.s
 ; Runs on LM3S1968
 ; Use a pointer implementation of a Moore finite state machine to operate
 ; a traffic light.
-; Daniel Valvano
-; May 21, 2012
 
-;  This example accompanies the book
-;  "Embedded Systems: Introduction to the Arm Cortex M3",
-;  ISBN: 978-1469998749, Jonathan Valvano, copyright (c) 2012
-;  Example 6.4, Program 6.8
-;
-;Copyright 2012 by Jonathan W. Valvano, valvano@mail.utexas.edu
-;   You may use, edit, run or distribute this file
-;   as long as the above copyright notice remains
-;THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHETHER EXPRESS, IMPLIED
-;OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF
-;MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE.
-;VALVANO SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL,
-;OR CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
-;For more information about my classes, my research, and my books, see
-;http://users.ece.utexas.edu/~valvano/
 
 ; north facing car detector connected to PE1 (1=car present)
 ; east facing car detector connected to PE0 (1=car present)
@@ -157,16 +142,19 @@ Start
     STR R0, [R1]                    ; [R1] = R0
     NOP
     NOP                             ; allow time to finish activating
+    
     ; set direction register
     LDR R1, =GPIO_PORTG_DIR_R       ; R1 = &GPIO_PORTG_DIR_R
     LDR R0, [R1]                    ; R0 = [R1]
     ORR R0, R0, #0x04               ; R0 = R0|0x04 (make PG2 output)
     STR R0, [R1]                    ; [R1] = R0
+    
     ; regular port function
     LDR R1, =GPIO_PORTG_AFSEL_R     ; R1 = &GPIO_PORTG_AFSEL_R
     LDR R0, [R1]                    ; R0 = [R1]
     BIC R0, R0, #0x04               ; R0 = R0&~0x04 (disable alt funct on PG2) (default setting)
     STR R0, [R1]                    ; [R1] = R0
+    
     ; enable digital port
     LDR R1, =GPIO_PORTG_DEN_R       ; R1 = &GPIO_PORTG_DEN_R
     LDR R0, [R1]                    ; R0 = [R1]
@@ -175,12 +163,12 @@ Start
     LDR R6, =GPIO_PORTG2            ; R6 = &GPIO_PORTG2
     LDR R7, [R6]                    ; R7 = [R7]
 	
-    BL  PLL_Init       ; 50 MHz clock
+    BL  PLL_Init       ; set clock to 50 MHz
     BL  SysTick_Init   ; enable SysTick
     LDR R4, =GoN       ; state pointer
     LDR R5, =SENSOR    ; 0x4002400C
     LDR R6, =LIGHT     ; 0x400250FC
-	LDR R7, =GPIO_PORTG2 ; don't walk light output
+    LDR R7, =GPIO_PORTG2 ; don't walk light output
 	
 	
 FSM LDR R0, [R4, #OUT] ; output value
